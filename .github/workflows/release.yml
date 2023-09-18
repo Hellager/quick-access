@@ -1,0 +1,49 @@
+name: Release DLL
+
+on: 
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+-dll'
+  workflow_dispatch:
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        os: [windows-latest]
+        nuget: [latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      working-directory: ./QuickAccess
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Setup NuGet.exe
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: ${{ matrix.nuget }}
+      - run: nuget restore QuickAccess.sln
+        working-directory: ${{ env.working-directory }}
+
+      - name: Build Solution
+        run: |
+          msbuild.exe QuickAccess.sln /p:platform="Any CPU" /p:configuration="Release"
+        working-directory: ${{ env.working-directory }}
+
+      - name: Create Draft Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ env.working-directory }}/bin/Release/QuickAccess.dll
+          tag_name: ${{ github.ref }}
+          body: |
+            Description of the draft release.
+          draft: true
+          token: ${{ secrets.GITHUB_TOKEN }}
