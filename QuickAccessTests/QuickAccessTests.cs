@@ -27,7 +27,7 @@ namespace QuickAccessTests
 
             if (!isDefaultSupported)
             {
-                handler.AddquickAccessCommandName(commandName);
+                handler.AddQuickAccessCommandName(commandName);
 
                 bool isCurrentSupported = handler.IsSupportedSystem();
 
