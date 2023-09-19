@@ -24,11 +24,9 @@ jobs:
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
 
-      - name: Setup NuGet.exe
-        uses: nuget/setup-nuget@v1
-        with:
-          nuget-version: ${{ matrix.nuget }}
-      - run: nuget restore QuickAccess.sln
+      - name: Restore Msbuild Packages
+        run: |
+          msbuild.exe -t:restore QuickAccess.sln
         working-directory: ${{ env.working-directory }}
 
       - name: Build Solution
