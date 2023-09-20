@@ -18,16 +18,16 @@ namespace QuickAccessTests
         }
 
         [TestMethod]
-        public void AddQuickAccessCommandName_WithGivenName()
+        public void AddQuickAccessMenuName_WithGivenName()
         {
             QuickAccessHandler handler = new QuickAccessHandler();
             bool isDefaultSupported = handler.IsSupportedSystem();
 
-            string commandName = "";
+            string menuName = "";
 
             if (!isDefaultSupported)
             {
-                handler.AddQuickAccessCommandName(commandName);
+                handler.AddQuickAccessMenuName(menuName);
 
                 bool isCurrentSupported = handler.IsSupportedSystem();
 

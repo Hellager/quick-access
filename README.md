@@ -15,7 +15,7 @@ Methods
 | `String` | GetVersion() | Get current assembly's version. |
 | `String` | GetSystemUICultureCode() | Get current system's ui culture code. |
 | `Boolean` | IsSupportedSystem() | Check whether current system is supported. |
-| `void` | AddQuickAccessCommandName(`String` name) | Add given command name to quickAccessCommandName dict. |
+| `void` | AddQuickAccessMenuName(`String` name) | Add given menu name to support unsupported UI system. |
 | `void` | AddFileExplorerMenuName(`String`name) | Add given name to fileExplorerName dict. |
 | `List<String>` | GetDefaultSupportLanguages() | Get the default support langugaes. <br /> Support `zh-CN, zh-TW, en-US, fr-FR, ru-RU` by default |
 | `Dictionary<String, String>` | GetQuickAccessDict() | Get the quick access items in dictionary. <br /> `<item path, item name>` |
@@ -42,5 +42,5 @@ Use function `IsSupportedSystem` to check whether system is supported, it depend
 
 By default, ui culture `zh-CN, zh-TW, en-US, fr-FR, ru-RU` is supported.
 
-If your system's ui culture is not supported by default, use function `AddquickAccessCommandName` to add your system's command name about remove item from quick access before removing items.
+If your system's ui culture is not supported by default, use function `AddQuickAccessMenuName` to add your system's menu name about remove item from quick access before removing items.
 

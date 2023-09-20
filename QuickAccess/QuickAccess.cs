@@ -179,10 +179,10 @@ namespace QuickAccess
         private bool isSupportedSystem;
 
         /// <summary>
-        /// Instance variable <c>quickAccessCommandName</c> <br />
-        /// Command name about quick access in different language.
+        /// Instance variable <c>quickAccessMenuNames</c> <br />
+        /// Menus names about quick access in different language.
         /// </summary>
-        private Dictionary<string, List<string>> quickAccessCommandName;
+        private Dictionary<string, List<string>> quickAccessMenuNames;
 
         /// <summary>
         /// Instance variable <c>fileExplorerName</c> <br />
@@ -263,7 +263,7 @@ namespace QuickAccess
 
         public QuickAccessHandler()
         {
-            this.quickAccessCommandName = new Dictionary<string, List<string>>
+            this.quickAccessMenuNames = new Dictionary<string, List<string>>
             {
                 {"zh-CN", new List<string>{ /*Win10*/ "从“快速访问”", "最近使用", /*Win11*/ "从“最近使用的"}},
                 {"zh-TW", new List<string>{ /*Win10*/ "從快速存取移除", "從 [快速存取]", /*Win11*/ "從最近使用中移" }},
@@ -390,26 +390,26 @@ namespace QuickAccess
         /******************************* Funtions About Internationalization Support *******************************/
 
         /// <summary>
-        /// Check whether given name is in quickAccessCommandName dict.
+        /// Check whether given name is in quickAccessMenuNames dict.
         /// </summary>
         /// (<paramref name="name"/>).
         /// <returns>
-        /// True if the given name is in quickAccessCommandName dict, else false.
+        /// True if the given name is in quickAccessMenuNames dict, else false.
         /// </returns>
         /// <param><c>name</c> Given name.</param>
-        private bool IsInQuickAccessCommandName(string name)
+        private bool IsInQuickAccessMenuNames(string name)
         {
-            foreach (var commandNameArr in this.quickAccessCommandName.Values)
+            foreach (var menuNamesArr in this.quickAccessMenuNames.Values)
             {
-                if (commandNameArr.Contains(name))
+                if (menuNamesArr.Contains(name))
                 {
                     return true;
                 }
                 else
                 {
-                    foreach (var commandName in commandNameArr)
+                    foreach (var menuName in menuNamesArr)
                     {
-                        if (commandName.Contains(name))
+                        if (menuName.Contains(name))
                         {
                             return true;
                         }
@@ -421,26 +421,26 @@ namespace QuickAccess
         }
 
         /// <summary>
-        /// Check whether given command name is supported.
+        /// Check whether given menu name is supported.
         /// </summary>
         /// (<paramref name="name"/>).
         /// <returns>
-        /// True if the given command name is supported, else false.
+        /// True if the given menu name is supported, else false.
         /// </returns>
         /// <param><c>name</c> Given name.</param>
-        private bool IsSupportedCommandName(string name)
+        private bool IsSupportedMenuName(string name)
         {
-            foreach (var commandNameArr in this.quickAccessCommandName.Values)
+            foreach (var menuNamesArr in this.quickAccessMenuNames.Values)
             {
-                if (commandNameArr.Contains(name))
+                if (menuNamesArr.Contains(name))
                 {
                     return true;
                 }
                 else
                 {
-                    foreach (var commandName in commandNameArr)
+                    foreach (var menuName in menuNamesArr)
                     {
-                        if (commandName.Contains(name))
+                        if (menuName.Contains(name))
                         {
                             return true;
                         }
@@ -461,16 +461,16 @@ namespace QuickAccess
         /// <param><c>code</c> Given language code, like 'en-US'.</param>
         private bool IsSupportedLanguage(string code)
         {
-            return this.quickAccessCommandName.ContainsKey(code);
+            return this.quickAccessMenuNames.ContainsKey(code);
         }
 
         /// <summary>
-        /// Check whether current system's command name about quick access is supported by default.
+        /// Check whether current system's menu name about quick access is supported by default.
         /// </summary>
         /// <returns>
         /// True if is supported by default, else false.
         /// </returns>
-        private bool CheckIsDefaultSupportedCommandName()
+        private bool CheckIsDefaultSupportedMenuName()
         {
             if (this.frequentFolders.Keys.Count == 0 && this.recentFiles.Keys.Count == 0)
                 return false;
@@ -556,9 +556,9 @@ namespace QuickAccess
 
                                                     if (menuName.ToString() == "") continue;
 
-                                                    foreach (var commandNameArr in this.quickAccessCommandName.Values)
+                                                    foreach (var menuNamesArr in this.quickAccessMenuNames.Values)
                                                     {
-                                                        foreach (var name in commandNameArr)
+                                                        foreach (var name in menuNamesArr)
                                                         {
                                                             if (name.Contains(menuName.ToString()))
                                                             {
@@ -592,10 +592,10 @@ namespace QuickAccess
         private bool CheckIsSupportedSystem()
         {
             var currentCulture = CultureInfo.CurrentUICulture.Name;
-            if (this.quickAccessCommandName.ContainsKey(currentCulture))
+            if (this.quickAccessMenuNames.ContainsKey(currentCulture))
                 return true;
 
-            return CheckIsDefaultSupportedCommandName();
+            return CheckIsDefaultSupportedMenuName();
         }
 
         /// <summary>
@@ -621,32 +621,32 @@ namespace QuickAccess
         }
 
         /// <summary>
-        /// Add given language code with given command name list to quickAccessCommandName dict.
+        /// Add given language code with given menu names list to quickAccessMenuNames dict.
         /// </summary>
-        /// (<paramref name="languageCode"/>,<paramref name="commandNames"/>).
+        /// (<paramref name="languageCode"/>,<paramref name="meunNames"/>).
         /// <param><c>languageCode</c> Given language code like 'en-US'.</param>
-        /// <param><c>commandNames</c> Given command name list.</param>
-        private void AddQuickAccessCommandName(string languageCode, List<string> commandNames)
+        /// <param><c>meunNames</c> Given menu names list.</param>
+        private void AddQuickAccessMenuName(string languageCode, List<string> meunNames)
         {
             if (IsSupportedLanguage(languageCode)) return;
 
-            this.quickAccessCommandName.Add(languageCode, commandNames);
+            this.quickAccessMenuNames.Add(languageCode, meunNames);
         }
 
         /// <summary>
-        /// Add given command name to quickAccessCommandName dict.
+        /// Add given menu name to quickAccessMenuName dict.
         /// </summary>
         /// (<paramref name="name"/>).
-        /// <param><c>name</c> Given command name.</param>
-        public void AddQuickAccessCommandName(string name)
+        /// <param><c>name</c> Given menu name.</param>
+        public void AddQuickAccessMenuName(string name)
         {
             if (name == "") return;
 
-            var unspecificArr = this.quickAccessCommandName["unspecific"];
+            var unspecificArr = this.quickAccessMenuNames["unspecific"];
 
             unspecificArr.Add(name);
 
-            this.quickAccessCommandName["unspecific"] = unspecificArr;
+            this.quickAccessMenuNames["unspecific"] = unspecificArr;
         }
 
         /// <summary>
@@ -731,7 +731,7 @@ namespace QuickAccess
         /// </returns>
         public List<string> GetDefaultSupportLanguages()
         {
-            List<string> quickAccess = new List<string>(this.quickAccessCommandName.Keys);
+            List<string> quickAccess = new List<string>(this.quickAccessMenuNames.Keys);
             List<string> fileExplorer = new List<string>(this.fileExplorerName.Keys);
 
             return quickAccess.Intersect(fileExplorer).ToList().Distinct().ToList();
@@ -1164,7 +1164,7 @@ namespace QuickAccess
                                                     StringBuilder menuName = new StringBuilder();
                                                     GetMenuString(hMenu, (uint)i, menuName, menuName.Capacity, (uint)MenuString_Pos.MF_BYPOSITION);
 
-                                                    foreach (var menuNameArr in this.quickAccessCommandName.Values)
+                                                    foreach (var menuNameArr in this.quickAccessMenuNames.Values)
                                                     {
                                                         foreach (var name in menuNameArr)
                                                         {
